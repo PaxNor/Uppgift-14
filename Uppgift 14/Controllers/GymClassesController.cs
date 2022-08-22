@@ -154,5 +154,12 @@ namespace Uppgift_14.Controllers
         {
           return (_context.GymClass?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        // moved from home controller
+        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        //public IActionResult Error() {
+        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        //}
+
     }
 }

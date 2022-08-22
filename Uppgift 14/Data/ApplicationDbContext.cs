@@ -11,13 +11,13 @@ namespace Uppgift_14.Data
             : base(options) {
         }
 
-        public DbSet<GymClass> GymClass { get; set; }
+        public DbSet<GymClass> GymClass => Set<GymClass>(); 
 
         // Setting up composite-key consisting of ApplicationUserId and GymClassId. Not defined manually in the class!
         protected override void OnModelCreating(ModelBuilder builder) {
             base.OnModelCreating(builder);
 
-            builder.Entity<ApplicationUserGymClass>().HasKey(k => new { k.ApplicationUserId, k.GymClassId });
+            builder.Entity<ApplicationUserGymClass>().HasKey(k => new { k.ApplicationUserId, k.GymClassId } );
         }
     }
 }
