@@ -19,6 +19,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => {
     options.Password.RequireDigit = false;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
     options.Password.RequiredLength = 1;
 }) 
     .AddRoles<IdentityRole>() // added this line, default Microsoft implementation
