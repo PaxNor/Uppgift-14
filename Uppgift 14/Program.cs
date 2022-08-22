@@ -12,7 +12,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // added ApplicationUser as the type
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false) // <-- changed to false!
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => {
+    options.SignIn.RequireConfirmedAccount = false; // <-- changed to false
+
+    // configure password requirements to be more relaxed
+    options.Password.RequireDigit = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 1;
+}) 
     .AddRoles<IdentityRole>() // added this line, default Microsoft implementation
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
