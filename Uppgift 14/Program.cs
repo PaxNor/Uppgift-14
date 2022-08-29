@@ -29,6 +29,27 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+// seed admin user
+using (var scope = app.Services.CreateScope()) {
+    var services = scope.ServiceProvider;
+    var db = services.GetRequiredService<ApplicationDbContext>();
+
+    //db.Database.EnsureDeleted();
+    //db.Database.Migrate();
+
+    // stored in secrets.json, to access right click on project
+    // and select: Manage User Secrets
+    var adminPW = builder.Configuration["AdminPass"];
+
+    try {
+        await SeedData.InitAsync(db, services, adminPW);
+    }
+    catch (Exception ex) {
+        Console.WriteLine(ex.Message);
+        throw;
+    }
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) {
     app.UseMigrationsEndPoint();
