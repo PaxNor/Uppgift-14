@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Uppgift_14.Data;
 using Uppgift_14.Models;
@@ -8,18 +10,64 @@ namespace Uppgift_14.Controllers
     public class GymClassesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public GymClassesController(ApplicationDbContext context)
+        public GymClassesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            this.userManager = userManager;
         }
 
         // GET: GymClasses
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index() 
         {
               return _context.GymClass != null ? 
                           View(await _context.GymClass.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.GymClass'  is null.");
+        }
+
+        // booking
+        //[Authorize]
+        public async Task<IActionResult> BookingToggle(int? id) 
+        {
+            if (id == null) return BadRequest();
+
+            var userId = userManager.GetUserId(User);
+
+            if(userId == null) return BadRequest();
+
+            // method 1
+            // get the selected gym class
+            var selectedGymClass = await _context.GymClass.Include(a => a.AttendingMembers).FirstOrDefaultAsync(g => g.Id == id);
+            if (selectedGymClass == null) return BadRequest();
+
+            // find out if user is already attending the class
+            var attending = selectedGymClass.AttendingMembers.FirstOrDefault(a => a.ApplicationUserId == userId);
+
+            // method 2
+            // Create a DbSet of ApplicationUserGymClass and search directly, then add / remove booking directly from this DbSet
+            //
+            // var attending = await _context.ApplicationUserGymClasses.FindAsync(userId, id);
+        
+
+            // book / unbook member to gym pass
+            if(attending == null) {
+                var booking = new ApplicationUserGymClass() {
+                    ApplicationUserId = userId,
+                    GymClassId = (int)id
+                };
+
+                // add the booking to the selected gym class
+                selectedGymClass.AttendingMembers.Add(booking);
+            }
+            else {
+                selectedGymClass.AttendingMembers.Remove(attending);
+            }
+
+            // update data base with changes
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
 
         // GET: GymClasses/Details/5
@@ -31,13 +79,32 @@ namespace Uppgift_14.Controllers
             }
 
             var gymClass = await _context.GymClass
+                .Include(a => a.AttendingMembers) // added this
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (gymClass == null)
-            {
-                return NotFound();
+
+            if(gymClass == null) return NotFound(); 
+
+            // new, use AutoMapper?
+            var gymClassVM = new GymClassViewModel() {
+                Name = gymClass.Name,
+                StartTime = gymClass.StartTime,
+                Duration = gymClass.Duration,
+                EndTime = gymClass.EndTime,
+                Description = gymClass.Description
+            };
+
+            foreach(var compositeKey in gymClass.AttendingMembers) {
+                var name = await _context.ApplicationUsers
+                                            .Where(i => i.Id == compositeKey.ApplicationUserId)
+                                            .Select(n => n.UserName)
+                                            .FirstOrDefaultAsync();
+
+                if(name == null) throw new Exception("ApplicationUserId in gymClass not found in AppliationUsers");
+
+                gymClassVM.AttendingMemberNames.Add(name);
             }
 
-            return View(gymClass);
+            return View(gymClassVM);
         }
 
         // GET: GymClasses/Create

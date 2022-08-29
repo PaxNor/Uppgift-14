@@ -9,11 +9,11 @@ using Uppgift_14.Data;
 
 #nullable disable
 
-namespace Uppgift_14.Data.Migrations
+namespace Uppgift_14.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220820224926_init")]
-    partial class init
+    [Migration("20220828234514_ApplicationUsers_DbSet")]
+    partial class ApplicationUsers_DbSet
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -228,18 +228,13 @@ namespace Uppgift_14.Data.Migrations
 
             modelBuilder.Entity("Uppgift_14.Models.ApplicationUserGymClass", b =>
                 {
-                    b.Property<int>("ApplicationUserId")
-                        .HasColumnType("int");
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("GymClassId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ApplicationUserId1")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("ApplicationUserId", "GymClassId");
-
-                    b.HasIndex("ApplicationUserId1");
 
                     b.HasIndex("GymClassId");
 
@@ -326,15 +321,21 @@ namespace Uppgift_14.Data.Migrations
 
             modelBuilder.Entity("Uppgift_14.Models.ApplicationUserGymClass", b =>
                 {
-                    b.HasOne("Uppgift_14.Models.ApplicationUser", null)
+                    b.HasOne("Uppgift_14.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("AttendedClasses")
-                        .HasForeignKey("ApplicationUserId1");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Uppgift_14.Models.GymClass", null)
+                    b.HasOne("Uppgift_14.Models.GymClass", "GymClass")
                         .WithMany("AttendingMembers")
                         .HasForeignKey("GymClassId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("GymClass");
                 });
 
             modelBuilder.Entity("Uppgift_14.Models.ApplicationUser", b =>

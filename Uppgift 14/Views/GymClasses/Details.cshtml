@@ -1,4 +1,5 @@
-﻿@model Uppgift_14.Models.GymClass
+﻿@*@model Uppgift_14.Models.GymClass*@
+@model Uppgift_14.Models.GymClassViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -35,8 +36,15 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
     </dl>
+    <br>
+    <h5>Attending members</h5>
+    <ul>
+    @foreach (var name in Model.AttendingMemberNames) {
+        <li>@Html.Raw(name)</li>
+    }
+    </ul>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    @*<a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |*@
     <a asp-action="Index">Back to List</a>
 </div>

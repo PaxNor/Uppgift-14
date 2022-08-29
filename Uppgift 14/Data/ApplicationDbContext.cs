@@ -12,6 +12,7 @@ namespace Uppgift_14.Data
         }
 
         public DbSet<GymClass> GymClass => Set<GymClass>(); 
+        public DbSet<ApplicationUser> ApplicationUsers => Set<ApplicationUser>();
 
         // Setting up composite-key consisting of ApplicationUserId and GymClassId. Not defined manually in the class!
         protected override void OnModelCreating(ModelBuilder builder) {

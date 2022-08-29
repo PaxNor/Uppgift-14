@@ -9,11 +9,11 @@ using Uppgift_14.Data;
 
 #nullable disable
 
-namespace Uppgift_14.Data.Migrations
+namespace Uppgift_14.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220822180534_string-type")]
-    partial class stringtype
+    [Migration("20220823083246_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

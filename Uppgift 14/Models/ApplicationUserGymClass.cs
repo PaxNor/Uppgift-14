@@ -1,5 +1,6 @@
 ﻿namespace Uppgift_14.Models
 {
+#nullable disable
     public class ApplicationUserGymClass
     {
         // using a composite key as id with fluent API (see db context class), leaving out defining it here 

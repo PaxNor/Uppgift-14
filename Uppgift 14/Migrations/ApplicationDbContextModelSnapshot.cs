@@ -8,7 +8,7 @@ using Uppgift_14.Data;
 
 #nullable disable
 
-namespace Uppgift_14.Data.Migrations
+namespace Uppgift_14.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
