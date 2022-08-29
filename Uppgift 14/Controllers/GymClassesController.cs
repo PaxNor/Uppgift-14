@@ -27,7 +27,7 @@ namespace Uppgift_14.Controllers
         }
 
         // booking
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> BookingToggle(int? id) 
         {
             if (id == null) return BadRequest();
@@ -71,6 +71,7 @@ namespace Uppgift_14.Controllers
         }
 
         // GET: GymClasses/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.GymClass == null)
@@ -108,6 +109,7 @@ namespace Uppgift_14.Controllers
         }
 
         // GET: GymClasses/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -130,6 +132,7 @@ namespace Uppgift_14.Controllers
         }
 
         // GET: GymClasses/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.GymClass == null)
@@ -148,6 +151,7 @@ namespace Uppgift_14.Controllers
         // POST: GymClasses/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartTime,Duration,Description")] GymClass gymClass)
@@ -181,6 +185,7 @@ namespace Uppgift_14.Controllers
         }
 
         // GET: GymClasses/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.GymClass == null)
