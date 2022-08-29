@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Uppgift_14.Models.GymClass>
+﻿@*@model IEnumerable<Uppgift_14.Models.GymClass>*@
+@model IEnumerable<Uppgift_14.Models.GymClassViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -53,7 +54,7 @@
                         <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> <span> | </span>
                     }
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> <span> | </span>
-                    <a asp-action="BookingToggle" asp-route-id="@item.Id">Book</a>
+                    <a asp-action="BookingToggle" asp-route-id="@item.Id">@(item.Attending ? "Unbook" : "Book") </a>
                 }
             </td>
         </tr>

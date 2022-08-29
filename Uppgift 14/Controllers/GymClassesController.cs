@@ -21,9 +21,26 @@ namespace Uppgift_14.Controllers
         // GET: GymClasses
         public async Task<IActionResult> Index() 
         {
-              return _context.GymClass != null ? 
-                          View(await _context.GymClass.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.GymClass'  is null.");
+            var gymClasses = await _context.GymClass.Include(a => a.AttendingMembers).ToListAsync();
+            List<GymClassViewModel> gymClassList = new();
+            var userId = userManager.GetUserId(User);
+
+            foreach (var gymClass in gymClasses) {
+                var gymClassVM = new GymClassViewModel() {
+                    Id = gymClass.Id,
+                    Name = gymClass.Name,
+                    StartTime = gymClass.StartTime,
+                    Duration = gymClass.Duration,
+                    EndTime = gymClass.EndTime,
+                    Description = gymClass.Description,
+
+                    Attending = gymClass.AttendingMembers.Where(i => i.ApplicationUserId == userId).Any()
+                };
+
+                gymClassList.Add(gymClassVM);
+            }
+
+            return View(gymClassList);
         }
 
         // booking
@@ -91,7 +108,7 @@ namespace Uppgift_14.Controllers
                 StartTime = gymClass.StartTime,
                 Duration = gymClass.Duration,
                 EndTime = gymClass.EndTime,
-                Description = gymClass.Description
+                Description = gymClass.Description,
             };
 
             foreach(var compositeKey in gymClass.AttendingMembers) {
