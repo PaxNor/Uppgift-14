@@ -17,7 +17,7 @@ public class SeedData
         // not using db context in this case, useful if seeding other data
         db = context ?? throw new ArgumentNullException(nameof(context));
         // if seeding users randomly, prevents database from growing on each run
-        if (db.Users.Any()) return;
+        //if (db.Users.Any()) return;
 
         roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         if (roleManager == null) {

@@ -6,7 +6,7 @@ namespace Uppgift_14.Models
     {
         public string FirstName { get; set; } = "";
         public string LastName { get; set; } = "";
-        public string FullName => @"{FirstName} {LastName}";
+        public string FullName => $"{FirstName} {LastName}";
         public DateTime TimeOfRegistration { get; private set; }
 
         // navigation property, using relational class ApplicationUserGymClass

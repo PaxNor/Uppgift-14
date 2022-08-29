@@ -97,9 +97,10 @@ namespace Uppgift_14.Controllers
             foreach(var compositeKey in gymClass.AttendingMembers) {
                 var name = await _context.ApplicationUsers
                                             .Where(i => i.Id == compositeKey.ApplicationUserId)
-                                            .Select(n => n.UserName)
+                                            .Select(n => n.FullName)
                                             .FirstOrDefaultAsync();
 
+                // maybe return BadRequest
                 if(name == null) throw new Exception("ApplicationUserId in gymClass not found in AppliationUsers");
 
                 gymClassVM.AttendingMemberNames.Add(name);
