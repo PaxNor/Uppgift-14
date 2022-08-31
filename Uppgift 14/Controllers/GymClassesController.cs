@@ -26,6 +26,7 @@ namespace Uppgift_14.Controllers
             var userId = userManager.GetUserId(User);
 
             foreach (var gymClass in gymClasses) {
+
                 var gymClassVM = new GymClassViewModel() {
                     Id = gymClass.Id,
                     Name = gymClass.Name,
